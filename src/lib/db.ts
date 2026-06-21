@@ -1,36 +1,31 @@
-import { drizzle } from "drizzle-orm/d1";
-import * as schema from "@/db/schema";
+import { drizzle } from 'drizzle-orm/libsql';
+import { drizzle as drizzleD1 } from 'drizzle-orm/d1';
+import { createClient } from '@libsql/client';
+import * as schema from '@/db/schema';
 
-// Runtime detection for Cloudflare environment
-function isCloudflareRuntime(): boolean {
-  // Check if we're in Cloudflare Workers/Pages environment
-  return (
-    typeof process === 'undefined' || 
-    process.env.CF_PAGES === '1' ||
-    typeof (globalThis as any).caches !== 'undefined'
-  );
-}
+// Check environment
+const isDevelopment = process.env.NODE_ENV === 'development';
+const isProduction = process.env.NODE_ENV === 'production';
 
-// For production/edge: use Cloudflare D1 binding
-// For development: use better-sqlite3 (imported dynamically)
 export async function getDb() {
-  // In Cloudflare environment, use D1
-  if (isCloudflareRuntime()) {
-    // Get the D1 binding from the global context
-    // This is provided by Cloudflare Pages at runtime
-    const binding = (globalThis as any).DB || (process as any).env.DB;
+  // Production: Use Turso (Vercel deployment)
+  if (isProduction && process.env.TURSO_DATABASE_URL) {
+    const client = createClient({
+      url: process.env.TURSO_DATABASE_URL!,
+      authToken: process.env.TURSO_AUTH_TOKEN!,
+    });
     
-    if (!binding) {
-      console.error('D1 binding not found in Cloudflare environment');
-      throw new Error('D1 binding not found. Make sure DB binding is configured in Cloudflare Pages.');
-    }
-    
-    return drizzle(binding, { schema });
-  } else {
-    // Development: use better-sqlite3
+    return drizzle(client, { schema });
+  }
+  
+  // Development: Use local better-sqlite3
+  if (isDevelopment) {
     const { getLocalDb } = await import('./db-local');
     return getLocalDb();
   }
+  
+  // Fallback (shouldn't happen, but safe default)
+  throw new Error('Database configuration error. Please check environment variables.');
 }
 
 export type Database = Awaited<ReturnType<typeof getDb>>;

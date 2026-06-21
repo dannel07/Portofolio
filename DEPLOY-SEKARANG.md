@@ -44,13 +44,16 @@ Production branch: main
 
 **Build settings:**
 ```
-Framework preset: Next.js
-Build command: npm run build
-Build output directory: .next
+Framework preset: Next.js (Static HTML Export)
+Build command: npx @cloudflare/next-on-pages
+Build output directory: .vercel/output/static
 Root directory: (leave empty / kosongkan)
 ```
 
-**PENTING**: Pastikan semua field sudah benar sebelum lanjut!
+**PENTING**: 
+- Jangan pilih "Next.js" biasa, pilih **"Next.js (Static HTML Export)"**
+- Build command HARUS: `npx @cloudflare/next-on-pages`
+- Build output directory HARUS: `.vercel/output/static`
 
 Klik **"Save and Deploy"** (JANGAN KLIK DULU!)
 

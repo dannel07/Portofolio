@@ -19,14 +19,6 @@ const nextConfig = {
       bodySizeLimit: '10mb',
     },
   },
-  webpack: (config, { isServer }) => {
-    // Externalize Node.js modules for Edge Runtime
-    if (isServer) {
-      config.externals = config.externals || [];
-      config.externals.push('better-sqlite3');
-    }
-    return config;
-  },
 };
 
 export default nextConfig;
