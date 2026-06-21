@@ -1,13 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getLocalDb } from "@/lib/db-local";
+import { getDb } from "@/lib/db";
 import { techStacks } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function getTechStacks() {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     const allTechStacks = await db
       .select()
       .from(techStacks)
@@ -21,7 +21,7 @@ export async function getTechStacks() {
 
 export async function getTechStacksByCategory(category: string) {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     const stacks = await db
       .select()
       .from(techStacks)
@@ -41,7 +41,7 @@ export async function createTechStack(data: {
   proficiency?: number;
 }) {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     
     const newTechStack = {
       id: `ts-${Date.now()}`,
@@ -73,7 +73,7 @@ export async function updateTechStack(id: string, data: {
   proficiency?: number;
 }) {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     
     await db
       .update(techStacks)
@@ -98,7 +98,7 @@ export async function updateTechStack(id: string, data: {
 
 export async function deleteTechStack(id: string) {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     
     await db.delete(techStacks).where(eq(techStacks.id, id));
 

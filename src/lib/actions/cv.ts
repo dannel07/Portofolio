@@ -1,14 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getLocalDb } from "@/lib/db-local";
+import { getDb } from "@/lib/db";
 import { cvFiles } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { createId } from "@/lib/auth-utils";
 
 export async function getCVFiles() {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     const files = await db
       .select()
       .from(cvFiles)
@@ -22,7 +22,7 @@ export async function getCVFiles() {
 
 export async function getActiveCV() {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     const files = await db
       .select()
       .from(cvFiles)
@@ -43,7 +43,7 @@ export async function createCVFile(data: {
   mimeType: string;
 }) {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     
     // Deactivate all other CVs
     await db
@@ -76,7 +76,7 @@ export async function createCVFile(data: {
 
 export async function setActiveCV(id: string) {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     
     // Deactivate all CVs
     await db
@@ -101,7 +101,7 @@ export async function setActiveCV(id: string) {
 
 export async function deleteCVFile(id: string) {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     
     await db.delete(cvFiles).where(eq(cvFiles.id, id));
 

@@ -1,13 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getLocalDb } from "@/lib/db-local";
+import { getDb } from "@/lib/db";
 import { profile } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function getProfile() {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     const profiles = await db.select().from(profile).limit(1);
     return profiles[0] || null;
   } catch (error) {
@@ -29,7 +29,7 @@ export async function updateProfile(data: {
   websiteUrl?: string;
 }) {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     
     // Check if profile exists
     const existing = await db.select().from(profile).limit(1);
@@ -87,7 +87,7 @@ export async function updateProfile(data: {
 
 export async function updateProfileAvatar(avatarUrl: string) {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     const existing = await db.select().from(profile).limit(1);
     
     if (existing.length > 0) {

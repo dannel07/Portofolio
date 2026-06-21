@@ -1,13 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getLocalDb } from "@/lib/db-local";
+import { getDb } from "@/lib/db";
 import { experiences } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function getExperiences() {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     const allExperiences = await db
       .select()
       .from(experiences)
@@ -31,7 +31,7 @@ export async function createExperience(data: {
   responsibilities?: string[];
 }) {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     
     const newExperience = {
       id: `exp-${Date.now()}`,
@@ -73,7 +73,7 @@ export async function updateExperience(id: string, data: {
   responsibilities?: string[];
 }) {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     
     await db
       .update(experiences)
@@ -103,7 +103,7 @@ export async function updateExperience(id: string, data: {
 
 export async function deleteExperience(id: string) {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     
     await db.delete(experiences).where(eq(experiences.id, id));
 

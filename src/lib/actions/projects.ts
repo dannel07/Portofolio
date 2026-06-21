@@ -1,13 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getLocalDb } from "@/lib/db-local";
+import { getDb } from "@/lib/db";
 import { projects, projectTechStacks } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function getProjects() {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     const allProjects = await db
       .select()
       .from(projects)
@@ -21,7 +21,7 @@ export async function getProjects() {
 
 export async function getProject(id: string) {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     const project = await db
       .select()
       .from(projects)
@@ -48,7 +48,7 @@ export async function createProject(data: {
   techStackIds?: string[];
 }) {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     
     const projectId = `proj-${Date.now()}`;
     
@@ -106,7 +106,7 @@ export async function updateProject(id: string, data: {
   techStackIds?: string[];
 }) {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     
     await db
       .update(projects)
@@ -154,7 +154,7 @@ export async function updateProject(id: string, data: {
 
 export async function deleteProject(id: string) {
   try {
-    const db = getLocalDb();
+    const db = await getDb();
     
     // Delete tech stack relations first
     await db.delete(projectTechStacks).where(eq(projectTechStacks.projectId, id));
