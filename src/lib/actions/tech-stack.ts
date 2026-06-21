@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { getLocalDb } from "@/lib/db-local";
 import { techStacks } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { createId } from "@/lib/auth-utils";
 
 export async function getTechStacks() {
   try {

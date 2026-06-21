@@ -4,7 +4,6 @@ import { revalidatePath } from "next/cache";
 import { getLocalDb } from "@/lib/db-local";
 import { experiences } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { createId } from "@/lib/auth-utils";
 
 export async function getExperiences() {
   try {
@@ -27,7 +26,7 @@ export async function createExperience(data: {
   type: string;
   startDate: string;
   endDate?: string;
-  isCurrently?: boolean;
+  isCurrently?: boolean | number;
   description?: string;
   responsibilities?: string[];
 }) {
@@ -69,7 +68,7 @@ export async function updateExperience(id: string, data: {
   type: string;
   startDate: string;
   endDate?: string;
-  isCurrently?: boolean;
+  isCurrently?: boolean | number;
   description?: string;
   responsibilities?: string[];
 }) {

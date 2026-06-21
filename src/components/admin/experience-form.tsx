@@ -19,7 +19,7 @@ export function ExperienceForm({ experience }: ExperienceFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
-  const [isCurrently, setIsCurrently] = useState(experience?.isCurrently || false);
+  const [isCurrently, setIsCurrently] = useState(!!experience?.isCurrently);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -136,12 +136,12 @@ export function ExperienceForm({ experience }: ExperienceFormProps) {
                 name="endDate"
                 type="date"
                 defaultValue={experience?.endDate || ""}
-                disabled={isCurrently}
+                disabled={!!isCurrently}
               />
               <Label className="flex items-center gap-2 text-sm font-normal">
                 <input
                   type="checkbox"
-                  checked={isCurrently}
+                  checked={!!isCurrently}
                   onChange={(e) => setIsCurrently(e.target.checked)}
                   className="h-4 w-4"
                 />

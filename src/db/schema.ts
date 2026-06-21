@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { relations } from "drizzle-orm";
 import { createId } from "@/lib/auth-utils";
 
@@ -81,7 +81,7 @@ export const education = sqliteTable("education", {
   gpa: text("gpa"),
   location: text("location"),
   description: text("description"),
-  isCurrently: integer("is_currently", { mode: "boolean" }).default(false),
+  isCurrently: integer("is_currently").default(0),
   order: integer("order").default(0),
   createdAt: integer("created_at"),
 });
@@ -111,7 +111,7 @@ export const projects = sqliteTable("projects", {
   githubUrl: text("github_url"),
   demoUrl: text("demo_url"),
   status: text("status").default("completed"), // in-progress, completed, archived
-  featured: integer("featured", { mode: "boolean" }).default(false),
+  featured: integer("featured").default(0),
   startDate: text("start_date"),
   endDate: text("end_date"),
   order: integer("order").default(0),
@@ -143,7 +143,7 @@ export const experiences = sqliteTable("experiences", {
   type: text("type").notNull(), // internship, organization, freelance, volunteer, bootcamp
   startDate: text("start_date").notNull(),
   endDate: text("end_date"),
-  isCurrently: integer("is_currently", { mode: "boolean" }).default(false),
+  isCurrently: integer("is_currently").default(0),
   description: text("description"),
   responsibilities: text("responsibilities"), // JSON array
   order: integer("order").default(0),
@@ -160,7 +160,7 @@ export const cvFiles = sqliteTable("cv_files", {
   fileUrl: text("file_url").notNull(),
   fileSize: integer("file_size").notNull(),
   mimeType: text("mime_type").notNull(),
-  isActive: integer("is_active", { mode: "boolean" }).default(true),
+  isActive: integer("is_active").default(1),
   uploadedAt: integer("uploaded_at"),
 });
 
