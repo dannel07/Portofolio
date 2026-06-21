@@ -1,55 +1,18 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getTechStacks } from "@/lib/actions/tech-stack";
 
-const skillsData = {
-  Frontend: [
-    "JavaScript",
-    "TypeScript",
-    "React",
-    "Next.js",
-    "HTML/CSS",
-    "Tailwind CSS",
-  ],
-  Backend: [
-    "Laravel",
-    "Go",
-    "PHP",
-    "Node.js",
-    "REST API",
-    "MVC Architecture",
-  ],
-  Database: [
-    "MySQL",
-    "PostgreSQL",
-    "MongoDB",
-    "SQL Server",
-    "Firebase",
-  ],
-  "Tools & Platforms": [
-    "Git",
-    "GitHub",
-    "Postman",
-    "Docker",
-    "Figma",
-    "Railway",
-  ],
-  "Data Analytics": [
-    "Python",
-    "Tableau",
-    "Microsoft Excel",
-    "Apache Spark",
-    "EDA",
-  ],
-  "Methodologies": [
-    "Agile/Scrum",
-    "Waterfall",
-    "SDLC",
-    "Clean Architecture",
-    "TDD",
-  ],
-};
+export async function SkillsSection() {
+  const techStacks = await getTechStacks();
+  
+  // Group tech stacks by category
+  const categories = ["Frontend", "Backend", "Database", "Mobile", "Data Analytics", "Tools"];
+  const skillsData: Record<string, typeof techStacks> = {};
+  
+  categories.forEach(category => {
+    skillsData[category] = techStacks.filter(t => t.category === category);
+  });
 
-export function SkillsSection() {
   return (
     <section id="skills" className="py-20">
       <div className="container mx-auto px-4">
@@ -67,20 +30,22 @@ export function SkillsSection() {
           {/* Skills Grid */}
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {Object.entries(skillsData).map(([category, skills]) => (
-              <Card key={category} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <CardTitle className="text-lg">{category}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {skills.map((skill) => (
-                      <Badge key={skill} variant="secondary">
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+              skills.length > 0 && (
+                <Card key={category} className="hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <CardTitle className="text-lg">{category}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-wrap gap-2">
+                      {skills.map((skill) => (
+                        <Badge key={skill.id} variant="secondary">
+                          {skill.name}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )
             ))}
           </div>
 

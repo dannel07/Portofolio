@@ -9,11 +9,10 @@ export const users = sqliteTable("users", {
     .$defaultFn(() => createId()),
   name: text("name"),
   email: text("email").notNull().unique(),
-  emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
+  emailVerified: integer("emailVerified"),
   image: text("image"),
   githubUsername: text("github_username"),
-  createdAt: integer("created_at", { mode: "timestamp_ms" })
-    .$defaultFn(() => Date.now()),
+  createdAt: integer("created_at"),
 });
 
 // Accounts table (for OAuth)
@@ -45,7 +44,7 @@ export const sessions = sqliteTable("sessions", {
   userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  expires: integer("expires", { mode: "timestamp_ms" }).notNull(),
+  expires: integer("expires").notNull(),
 });
 
 // Profile table
@@ -65,10 +64,8 @@ export const profile = sqliteTable("profile", {
   linkedinUrl: text("linkedin_url"),
   twitterUrl: text("twitter_url"),
   websiteUrl: text("website_url"),
-  createdAt: integer("created_at", { mode: "timestamp_ms" })
-    .$defaultFn(() => Date.now()),
-  updatedAt: integer("updated_at", { mode: "timestamp_ms" })
-    .$defaultFn(() => Date.now()),
+  createdAt: integer("created_at"),
+  updatedAt: integer("updated_at"),
 });
 
 // Education table
@@ -86,8 +83,7 @@ export const education = sqliteTable("education", {
   description: text("description"),
   isCurrently: integer("is_currently", { mode: "boolean" }).default(false),
   order: integer("order").default(0),
-  createdAt: integer("created_at", { mode: "timestamp_ms" })
-    .$defaultFn(() => Date.now()),
+  createdAt: integer("created_at"),
 });
 
 // Tech Stacks table
@@ -100,8 +96,7 @@ export const techStacks = sqliteTable("tech_stacks", {
   icon: text("icon"), // URL to icon or icon name
   proficiency: integer("proficiency").default(50), // 0-100
   order: integer("order").default(0),
-  createdAt: integer("created_at", { mode: "timestamp_ms" })
-    .$defaultFn(() => Date.now()),
+  createdAt: integer("created_at"),
 });
 
 // Projects table
@@ -120,10 +115,8 @@ export const projects = sqliteTable("projects", {
   startDate: text("start_date"),
   endDate: text("end_date"),
   order: integer("order").default(0),
-  createdAt: integer("created_at", { mode: "timestamp_ms" })
-    .$defaultFn(() => Date.now()),
-  updatedAt: integer("updated_at", { mode: "timestamp_ms" })
-    .$defaultFn(() => Date.now()),
+  createdAt: integer("created_at"),
+  updatedAt: integer("updated_at"),
 });
 
 // Project Tech Stack (many-to-many)
@@ -154,8 +147,7 @@ export const experiences = sqliteTable("experiences", {
   description: text("description"),
   responsibilities: text("responsibilities"), // JSON array
   order: integer("order").default(0),
-  createdAt: integer("created_at", { mode: "timestamp_ms" })
-    .$defaultFn(() => Date.now()),
+  createdAt: integer("created_at"),
 });
 
 // CV Files table
@@ -169,8 +161,7 @@ export const cvFiles = sqliteTable("cv_files", {
   fileSize: integer("file_size").notNull(),
   mimeType: text("mime_type").notNull(),
   isActive: integer("is_active", { mode: "boolean" }).default(true),
-  uploadedAt: integer("uploaded_at", { mode: "timestamp_ms" })
-    .$defaultFn(() => Date.now()),
+  uploadedAt: integer("uploaded_at"),
 });
 
 // Analytics table
@@ -183,8 +174,7 @@ export const analytics = sqliteTable("analytics", {
   ipAddress: text("ip_address"),
   userAgent: text("user_agent"),
   referer: text("referer"),
-  timestamp: integer("timestamp", { mode: "timestamp_ms" })
-    .$defaultFn(() => Date.now()),
+  timestamp: integer("timestamp"),
 });
 
 // Relations

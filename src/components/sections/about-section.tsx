@@ -1,7 +1,10 @@
 import { GraduationCap, MapPin, Mail, Phone } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { getProfile } from "@/lib/actions/profile";
 
-export function AboutSection() {
+export async function AboutSection() {
+  const profile = await getProfile();
+
   return (
     <section id="about" className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
@@ -20,19 +23,7 @@ export function AboutSection() {
               <CardContent className="pt-6">
                 <h3 className="mb-4 text-xl font-semibold">Biography</h3>
                 <p className="text-muted-foreground leading-relaxed">
-                  I'm an Applied Software Engineering Technology student at
-                  Institut Teknologi Del with hands-on experience in fullstack
-                  web development, modern database management, and system
-                  analysis. I specialize in building scalable applications
-                  using Laravel, Go, PHP, and JavaScript, with a strong
-                  understanding of MVC architecture and RESTful API design.
-                </p>
-                <p className="mt-4 text-muted-foreground leading-relaxed">
-                  I'm passionate about transforming complex business
-                  requirements into functional software solutions and
-                  collaborating in agile environments. Currently exploring
-                  modern development practices and eager to apply my technical
-                  skills in backend engineering and digital business processes.
+                  {profile?.description || "I'm an Applied Software Engineering Technology student at Institut Teknologi Del with hands-on experience in fullstack web development, modern database management, and system analysis."}
                 </p>
               </CardContent>
             </Card>
@@ -65,23 +56,29 @@ export function AboutSection() {
               {/* Contact Info */}
               <Card>
                 <CardContent className="pt-6 space-y-3">
-                  <div className="flex items-center gap-3">
-                    <MapPin className="h-5 w-5 text-muted-foreground" />
-                    <span className="text-sm">Toba, North Sumatera, Indonesia</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Mail className="h-5 w-5 text-muted-foreground" />
-                    <a
-                      href="mailto:sinambeladaniel07@gmail.com"
-                      className="text-sm hover:text-primary transition-colors"
-                    >
-                      sinambeladaniel07@gmail.com
-                    </a>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Phone className="h-5 w-5 text-muted-foreground" />
-                    <span className="text-sm">+62 812 6316 7246</span>
-                  </div>
+                  {profile?.location && (
+                    <div className="flex items-center gap-3">
+                      <MapPin className="h-5 w-5 text-muted-foreground" />
+                      <span className="text-sm">{profile.location}</span>
+                    </div>
+                  )}
+                  {profile?.email && (
+                    <div className="flex items-center gap-3">
+                      <Mail className="h-5 w-5 text-muted-foreground" />
+                      <a
+                        href={`mailto:${profile.email}`}
+                        className="text-sm hover:text-primary transition-colors"
+                      >
+                        {profile.email}
+                      </a>
+                    </div>
+                  )}
+                  {profile?.phone && (
+                    <div className="flex items-center gap-3">
+                      <Phone className="h-5 w-5 text-muted-foreground" />
+                      <span className="text-sm">{profile.phone}</span>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
