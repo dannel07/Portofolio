@@ -1,23 +1,8 @@
-# 🚀 DEPLOYMENT - TINGGAL LANGKAH TERAKHIR!
+-- =========================================
+-- STEP 1: CREATE TABLES
+-- Copy and run this entire block in Turso SQL Console
+-- =========================================
 
-## ✅ Status Sekarang
-- ✅ Website SUDAH LIVE di Vercel
-- ✅ Build BERHASIL
-- ✅ Database Turso SUDAH TERHUBUNG
-- ❌ Tabel database BELUM dibuat (error: "no such table")
-
-## 📋 Yang Harus Dilakukan (5-10 menit)
-
-### Langkah 1: Buka Turso Dashboard
-1. Buka browser, pergi ke: https://turso.tech/app
-2. Login dengan akun Turso kamu
-3. Pilih database `portfolio-db`
-
-### Langkah 2: Buat Tabel Database
-1. Di dashboard Turso, cari tombol **"SQL Console"** atau **"SQL Shell"**
-2. Copy SEMUA SQL di bawah ini (dari `CREATE TABLE` pertama sampai akhir):
-
-```sql
 CREATE TABLE `accounts` (
 	`id` text PRIMARY KEY NOT NULL,
 	`user_id` text NOT NULL,
@@ -159,16 +144,12 @@ CREATE TABLE `users` (
 CREATE UNIQUE INDEX `sessions_session_token_unique` ON `sessions` (`session_token`);
 
 CREATE UNIQUE INDEX `users_email_unique` ON `users` (`email`);
-```
 
-3. Paste SQL di atas ke SQL Console
-4. Klik tombol **"Execute"** atau **"Run"**
-5. Tunggu sampai muncul pesan sukses (biasanya "Successfully executed")
+-- =========================================
+-- STEP 2: INSERT SAMPLE DATA
+-- After tables are created, run this block
+-- =========================================
 
-### Langkah 3: Isi Data Awal (Seed Database)
-Sekarang tabel sudah dibuat, kita perlu isi data awal. Copy dan jalankan SQL di bawah ini di SQL Console yang sama:
-
-```sql
 -- Insert Profile
 INSERT INTO profile (id, name, email, phone, location, bio, description, github_url, linkedin_url, created_at, updated_at)
 VALUES (
@@ -321,59 +302,3 @@ INSERT INTO experiences (id, title, company, location, type, start_date, end_dat
   0,
   1719014400000
 );
-```
-
-### Langkah 4: Update URL Production
-1. Buka dashboard Vercel: https://vercel.com/dashboard
-2. Pilih project portfolio kamu
-3. Copy URL production (contoh: `https://portfolio-dannel07.vercel.app`)
-4. Pergi ke **Settings** → **Environment Variables**
-5. Edit variable `NEXTAUTH_URL`:
-   - Ganti value dari `http://localhost:3000` ke URL production kamu
-6. Klik **Save**
-
-### Langkah 5: Update GitHub OAuth Callback URL
-1. Buka: https://github.com/settings/developers
-2. Pilih OAuth App dengan Client ID: `Ov23li4pLk0xJisBzz6g`
-3. Update **Authorization callback URL** menjadi:
-   ```
-   https://PRODUCTION-URL-KAMU/api/auth/callback/github
-   ```
-   (Ganti `PRODUCTION-URL-KAMU` dengan URL Vercel kamu)
-4. Klik **Update application**
-
-### Langkah 6: Redeploy Vercel
-1. Kembali ke dashboard Vercel
-2. Di tab **Deployments**, klik tombol **...** (three dots) pada deployment terakhir
-3. Klik **Redeploy**
-4. Tunggu sampai build selesai (±2 menit)
-
-### Langkah 7: Test Website! 🎉
-1. Buka URL production kamu
-2. Klik **Sign in** → Pilih **GitHub**
-3. Authorize aplikasi
-4. Kamu akan masuk ke Admin Dashboard!
-5. Test:
-   - ✅ Tambah project baru
-   - ✅ Edit profile
-   - ✅ Tambah experience
-   - ✅ Tambah tech stack
-
-## 🎯 Setelah Selesai
-
-Website kamu akan:
-- ✅ LIVE di internet (gratis selamanya)
-- ✅ Auto-deploy setiap kali push ke GitHub
-- ✅ Database production dengan Turso (gratis 9GB)
-- ✅ Login dengan GitHub OAuth
-- ✅ Full CRUD untuk semua data
-
-## 📞 Kalau Ada Masalah
-
-Beritahu saya di mana kamu stuck:
-- Error di SQL Console?
-- URL production tidak bisa diakses?
-- OAuth GitHub error?
-- Atau masalah lain?
-
-Saya siap bantu! 💪
