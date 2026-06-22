@@ -1,14 +1,7 @@
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { getDb } from "@/lib/db";
-
-// Check if we're in development or production
-const isDevelopment = process.env.NODE_ENV === "development";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  // Use adapter with Turso database
-  adapter: DrizzleAdapter(getDb()),
   providers: [
     GitHub({
       clientId: process.env.AUTH_GITHUB_ID!,
