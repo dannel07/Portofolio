@@ -1,16 +1,14 @@
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { getDb } from "@/db";
+import { getDb } from "@/lib/db";
 
 // Check if we're in development or production
 const isDevelopment = process.env.NODE_ENV === "development";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  // Only use adapter in production with Cloudflare D1
-  ...(isDevelopment ? {} : {
-    adapter: DrizzleAdapter(getDb(process.env.DB as any)),
-  }),
+  // Use adapter with Turso database
+  adapter: DrizzleAdapter(getDb()),
   providers: [
     GitHub({
       clientId: process.env.AUTH_GITHUB_ID!,
@@ -20,8 +18,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     async session({ session, user, token }) {
       if (session.user) {
-        // In development, use token instead of user
-        if (isDevelopment && token) {
+        // Use token for session data
+        if (token) {
           session.user.id = token.sub || "";
           (session.user as any).githubUsername = token.githubUsername;
         } else if (user) {
@@ -38,7 +36,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
     async jwt({ token, account, profile }) {
       if (account && profile) {
-        // Store GitHub username in token for development
+        // Store GitHub username in token
         token.githubUsername = (profile as any).login;
       }
       return token;
@@ -51,9 +49,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return true;
     },
   },
-  // Use JWT strategy for development
+  // Use JWT strategy
   session: {
-    strategy: isDevelopment ? "jwt" : "database",
+    strategy: "jwt",
   },
   pages: {
     signIn: "/admin/signin",
