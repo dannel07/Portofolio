@@ -2,4 +2,6 @@ import { handlers } from "@/lib/auth";
 
 export const runtime = 'nodejs';
 
-export const { GET, POST } = handlers;
+const { GET: AuthGET, POST: AuthPOST } = handlers;
+
+export { AuthGET as GET, AuthPOST as POST };
