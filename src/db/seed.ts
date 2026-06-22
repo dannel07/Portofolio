@@ -16,7 +16,7 @@ export const profileSeedData = {
   location: "Toba, North Sumatera, Indonesia",
   bio: "Applied Software Engineering Technology student with hands-on experience in fullstack web development and system analysis",
   description: "An Applied Software Engineering Technology student at Institut Teknologi Del with hands-on experience in fullstack web development, modern database management, and system analysis. Proficient in building scalable applications using Laravel, Go, PHP, and JavaScript, with a strong understanding of MVC architecture and RESTful API design. Passionate about exploring modern development practices and eager to apply technical skills in backend engineering and digital business processes.",
-  avatar: "/images/profile.jpg",
+  avatar: "/images/profile.jpeg",
   githubUrl: "https://github.com/dannel07",
   linkedinUrl: "https://linkedin.com/in/daniel-sinambela-aaba18389",
 };

@@ -27,7 +27,7 @@ export async function HeroSection() {
                   <div className="relative h-full w-full bg-gradient-to-br from-primary/20 via-blue-500/20 to-purple-500/20">
                     {/* Jika ada foto, uncomment ini dan ganti path */}
                     {/* <Image
-                      src="/images/profile.jpg"
+                      src="/images/profile.jpeg"
                       alt="Daniel Sinambela"
                       fill
                       className="object-cover"
@@ -39,7 +39,7 @@ export async function HeroSection() {
                       <div className="text-center">
                         <div className="text-8xl font-bold text-primary mb-4">DS</div>
                         <p className="text-sm text-muted-foreground">Add your photo to</p>
-                        <p className="text-sm text-muted-foreground font-mono">/public/images/profile.jpg</p>
+                        <p className="text-sm text-muted-foreground font-mono">/public/images/profile.jpeg</p>
                       </div>
                     </div>
                   </div>

@@ -10,7 +10,7 @@ console.log('🌱 Starting database seed...\n');
 
 // Profile
 console.log('📊 Seeding Profile...');
-execSync(`wrangler d1 execute portfolio-db --local --command "INSERT OR REPLACE INTO profile (id, name, email, phone, location, bio, description, avatar, github_url, linkedin_url, created_at, updated_at) VALUES ('prof-1', 'Daniel Sinambela', 'sinambeladaniel07@gmail.com', '+6281263167246', 'Toba, North Sumatera, Indonesia', 'Applied Software Engineering Technology student with hands-on experience in fullstack web development', 'Applied Software Engineering Technology student at Institut Teknologi Del with hands-on experience in fullstack web development, modern database management, and system analysis.', '/images/profile.jpg', 'https://github.com/dannel07', 'https://linkedin.com/in/daniel-sinambela-aaba18389', 1719849600000, 1719849600000)"`, { stdio: 'inherit' });
+execSync(`wrangler d1 execute portfolio-db --local --command "INSERT OR REPLACE INTO profile (id, name, email, phone, location, bio, description, avatar, github_url, linkedin_url, created_at, updated_at) VALUES ('prof-1', 'Daniel Sinambela', 'sinambeladaniel07@gmail.com', '+6281263167246', 'Toba, North Sumatera, Indonesia', 'Applied Software Engineering Technology student with hands-on experience in fullstack web development', 'Applied Software Engineering Technology student at Institut Teknologi Del with hands-on experience in fullstack web development, modern database management, and system analysis.', '/images/profile.jpeg', 'https://github.com/dannel07', 'https://linkedin.com/in/daniel-sinambela-aaba18389', 1719849600000, 1719849600000)"`, { stdio: 'inherit' });
 
 // Tech Stacks - Backend
 console.log('\n💻 Seeding Tech Stacks...');
