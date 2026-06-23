@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Download, Github, Linkedin, Mail, MapPin, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,26 +24,25 @@ export async function HeroSection() {
                 
                 {/* Main Photo Container */}
                 <div className="relative h-[320px] w-[320px] md:h-[400px] md:w-[400px] overflow-hidden rounded-3xl border-4 border-background shadow-2xl">
-                  {/* Placeholder - Ganti dengan foto Anda */}
-                  <div className="relative h-full w-full bg-gradient-to-br from-primary/20 via-blue-500/20 to-purple-500/20">
-                    {/* Jika ada foto, uncomment ini dan ganti path */}
-                    {/* <Image
-                      src="/images/profile.jpeg"
-                      alt="Daniel Sinambela"
+                  {profile?.avatar ? (
+                    <Image
+                      src={profile.avatar}
+                      alt={profile.name || "Profile Photo"}
                       fill
                       className="object-cover"
                       priority
-                    /> */}
-                    
-                    {/* Placeholder text - hapus ini jika sudah ada foto */}
-                    <div className="flex h-full w-full items-center justify-center">
-                      <div className="text-center">
-                        <div className="text-8xl font-bold text-primary mb-4">DS</div>
-                        <p className="text-sm text-muted-foreground">Add your photo to</p>
-                        <p className="text-sm text-muted-foreground font-mono">/public/images/profile.jpeg</p>
+                    />
+                  ) : (
+                    <div className="relative h-full w-full bg-gradient-to-br from-primary/20 via-blue-500/20 to-purple-500/20">
+                      <div className="flex h-full w-full items-center justify-center">
+                        <div className="text-center">
+                          <div className="text-8xl font-bold text-primary mb-4">DS</div>
+                          <p className="text-sm text-muted-foreground">Add your photo in</p>
+                          <p className="text-sm text-muted-foreground font-mono">Admin → Profile</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                   
                   {/* Hover Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

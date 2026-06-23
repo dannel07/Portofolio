@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ExternalLink, Github } from "lucide-react";
+import Image from "next/image";
+import { ExternalLink, Github, ImageIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -38,13 +39,19 @@ export async function ProjectsSection() {
                   key={project.id}
                   className="flex flex-col hover:shadow-lg transition-all"
                 >
-                  {project.thumbnail && (
+                  {project.thumbnail ? (
                     <div className="aspect-video bg-muted relative overflow-hidden">
-                      <img 
+                      <Image 
                         src={project.thumbnail} 
                         alt={project.title}
-                        className="object-cover w-full h-full"
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
+                    </div>
+                  ) : (
+                    <div className="aspect-video bg-gradient-to-br from-muted via-muted/50 to-muted flex items-center justify-center">
+                      <ImageIcon className="h-16 w-16 text-muted-foreground/30" />
                     </div>
                   )}
                   <CardHeader>

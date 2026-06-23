@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTechStacks } from "@/lib/actions/tech-stack";
@@ -36,11 +37,22 @@ export async function SkillsSection() {
                     <CardTitle className="text-lg">{category}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-3">
                       {skills.map((skill) => (
-                        <Badge key={skill.id} variant="secondary">
-                          {skill.name}
-                        </Badge>
+                        <div key={skill.id} className="flex items-center gap-2 px-3 py-2 rounded-md bg-secondary hover:bg-secondary/80 transition-colors">
+                          {skill.icon && (
+                            <div className="relative h-5 w-5 flex-shrink-0">
+                              <Image 
+                                src={skill.icon} 
+                                alt={skill.name}
+                                width={20}
+                                height={20}
+                                className="object-contain"
+                              />
+                            </div>
+                          )}
+                          <span className="text-sm font-medium">{skill.name}</span>
+                        </div>
                       ))}
                     </div>
                   </CardContent>
