@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Save, Loader2 } from "lucide-react";
 import { createProject, updateProject } from "@/lib/actions/projects";
 import { Project, TechStack } from "@/db/schema";
+import { ImageUpload } from "@/components/admin/image-upload";
 
 interface ProjectFormProps {
   project?: Project | null;
@@ -20,6 +21,7 @@ export function ProjectForm({ project, techStacks }: ProjectFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [thumbnailUrl, setThumbnailUrl] = useState(project?.thumbnail || "");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -31,7 +33,7 @@ export function ProjectForm({ project, techStacks }: ProjectFormProps) {
       title: formData.get("title") as string,
       description: formData.get("description") as string,
       longDescription: formData.get("longDescription") as string || undefined,
-      thumbnail: formData.get("thumbnail") as string || undefined,
+      thumbnail: thumbnailUrl || undefined,
       githubUrl: formData.get("githubUrl") as string || undefined,
       demoUrl: formData.get("demoUrl") as string || undefined,
       status: formData.get("status") as string || "completed",
@@ -126,13 +128,12 @@ export function ProjectForm({ project, techStacks }: ProjectFormProps) {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="thumbnail">Thumbnail URL</Label>
-            <Input
-              id="thumbnail"
-              name="thumbnail"
-              type="url"
-              placeholder="https://example.com/image.jpg"
-              defaultValue={project?.thumbnail || ""}
+            <ImageUpload
+              label="Project Thumbnail"
+              value={thumbnailUrl}
+              onChange={setThumbnailUrl}
+              type="project"
+              accept="image/*"
             />
           </div>
         </CardContent>
@@ -165,7 +166,7 @@ export function ProjectForm({ project, techStacks }: ProjectFormProps) {
                   type="checkbox"
                   id="featured"
                   name="featured"
-                  defaultChecked={project?.featured || false}
+                  defaultChecked={!!project?.featured}
                   className="h-4 w-4"
                 />
                 Featured Project

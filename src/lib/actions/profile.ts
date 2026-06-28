@@ -23,6 +23,8 @@ export async function updateProfile(data: {
   location?: string;
   bio?: string;
   description?: string;
+  avatar?: string;
+  resumeUrl?: string;
   githubUrl?: string;
   linkedinUrl?: string;
   twitterUrl?: string;
@@ -45,6 +47,8 @@ export async function updateProfile(data: {
           location: data.location || null,
           bio: data.bio || null,
           description: data.description || null,
+          avatar: data.avatar || null,
+          resumeUrl: data.resumeUrl || null,
           githubUrl: data.githubUrl || null,
           linkedinUrl: data.linkedinUrl || null,
           twitterUrl: data.twitterUrl || null,
@@ -62,8 +66,8 @@ export async function updateProfile(data: {
         location: data.location || null,
         bio: data.bio || null,
         description: data.description || null,
-        avatar: null,
-        resumeUrl: null,
+        avatar: data.avatar || null,
+        resumeUrl: data.resumeUrl || null,
         githubUrl: data.githubUrl || null,
         linkedinUrl: data.linkedinUrl || null,
         twitterUrl: data.twitterUrl || null,

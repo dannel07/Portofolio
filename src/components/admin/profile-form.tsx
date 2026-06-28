@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Save, Loader2 } from "lucide-react";
 import { updateProfile } from "@/lib/actions/profile";
 import { Profile } from "@/db/schema";
+import { ImageUpload } from "@/components/admin/image-upload";
 
 interface ProfileFormProps {
   profile: Profile | null;
@@ -19,6 +20,8 @@ export function ProfileForm({ profile }: ProfileFormProps) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [avatarUrl, setAvatarUrl] = useState(profile?.avatar || "");
+  const [resumeUrl, setResumeUrl] = useState(profile?.resumeUrl || "");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -33,6 +36,8 @@ export function ProfileForm({ profile }: ProfileFormProps) {
       location: formData.get("location") as string || undefined,
       bio: formData.get("bio") as string || undefined,
       description: formData.get("description") as string || undefined,
+      avatar: avatarUrl || undefined,
+      resumeUrl: resumeUrl || undefined,
       githubUrl: formData.get("github") as string || undefined,
       linkedinUrl: formData.get("linkedin") as string || undefined,
       twitterUrl: formData.get("twitter") as string || undefined,
@@ -54,6 +59,33 @@ export function ProfileForm({ profile }: ProfileFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Profile Photo & CV */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Profile Photo & Resume</CardTitle>
+          <CardDescription>
+            Upload your profile photo and CV/Resume
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <ImageUpload
+            label="Profile Photo"
+            value={avatarUrl}
+            onChange={setAvatarUrl}
+            type="profile"
+            accept="image/*"
+          />
+          
+          <ImageUpload
+            label="Resume/CV (PDF)"
+            value={resumeUrl}
+            onChange={setResumeUrl}
+            type="cv"
+            accept="application/pdf"
+          />
+        </CardContent>
+      </Card>
+
       {/* Basic Information */}
       <Card>
         <CardHeader>
