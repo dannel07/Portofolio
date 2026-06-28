@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { Upload, X, Loader2, Image as ImageIcon } from "lucide-react";
+import { useState, useEffect } from "react";
+import { X, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
-import { toast } from "sonner";
 
 interface ImageUploadProps {
   label: string;
@@ -21,63 +20,17 @@ export function ImageUpload({
   value,
   onChange,
   type = "project",
-  accept = "image/*",
 }: ImageUploadProps) {
-  const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(value || null);
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Validate file size (10MB max)
-    if (file.size > 10 * 1024 * 1024) {
-      toast.error("File too large. Maximum size is 10MB");
-      return;
-    }
-
-    // Show preview
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPreview(reader.result as string);
-    };
-    reader.readAsDataURL(file);
-
-    // Upload file
-    setUploading(true);
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("type", type);
-
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Upload failed");
-      }
-
-      const data = await response.json();
-      onChange(data.url);
-      toast.success("Image uploaded successfully!");
-    } catch (error) {
-      console.error("Upload error:", error);
-      toast.error(
-        error instanceof Error ? error.message : "Failed to upload image"
-      );
-      setPreview(value || null);
-    } finally {
-      setUploading(false);
-    }
-  };
+  // Update preview when value changes
+  useEffect(() => {
+    setPreview(value || null);
+  }, [value]);
 
   const handleRemove = () => {
     setPreview(null);
     onChange("");
-    toast.success("Image removed");
   };
 
   const handleUrlChange = (url: string) => {
@@ -89,7 +42,7 @@ export function ImageUpload({
     <div className="space-y-4">
       <Label>{label}</Label>
 
-      {/* Preview */}
+      {/* Preview Image */}
       {preview && type !== "cv" && (
         <div className="relative w-full aspect-video bg-muted rounded-lg overflow-hidden border-2 border-border">
           <Image
@@ -97,7 +50,7 @@ export function ImageUpload({
             alt="Preview"
             fill
             className="object-cover"
-            unoptimized={preview.startsWith("data:")}
+            unoptimized={preview.startsWith("http") || preview.startsWith("data:")}
           />
           <Button
             type="button"
@@ -111,65 +64,100 @@ export function ImageUpload({
         </div>
       )}
 
-      {/* Upload Button */}
-      <div className="flex gap-2">
-        <div className="relative flex-1">
-          <Input
-            type="file"
-            accept={accept}
-            onChange={handleFileChange}
-            disabled={uploading}
-            className="hidden"
-            id={`file-upload-${type}`}
-          />
+      {/* CV Preview */}
+      {preview && type === "cv" && (
+        <div className="flex items-center gap-2 p-4 bg-muted rounded-lg border-2 border-border">
+          <div className="flex-1">
+            <p className="text-sm font-medium">CV File</p>
+            <p className="text-xs text-muted-foreground">{preview}</p>
+          </div>
           <Button
             type="button"
-            variant="outline"
-            className="w-full"
-            onClick={() =>
-              document.getElementById(`file-upload-${type}`)?.click()
-            }
-            disabled={uploading}
+            variant="ghost"
+            size="icon"
+            onClick={handleRemove}
           >
-            {uploading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Uploading...
-              </>
-            ) : (
-              <>
-                <Upload className="mr-2 h-4 w-4" />
-                Upload {type === "cv" ? "PDF" : "Image"}
-              </>
-            )}
+            <X className="h-4 w-4" />
           </Button>
         </div>
-      </div>
+      )}
 
-      {/* Or use URL */}
+      {/* URL Input */}
       <div className="space-y-2">
-        <Label htmlFor={`url-${type}`} className="text-sm text-muted-foreground">
-          Or enter URL directly:
+        <Label htmlFor={`url-${type}`}>
+          {type === "cv" ? "CV/Resume URL" : "Image URL"}
         </Label>
         <Input
           id={`url-${type}`}
           type="text"
           placeholder={
             type === "cv"
-              ? "/cv/filename.pdf"
-              : "/images/image.jpg or https://..."
+              ? "/cv/CV_YourName.pdf"
+              : "/images/photo.jpg"
           }
           value={value || ""}
           onChange={(e) => handleUrlChange(e.target.value)}
         />
       </div>
 
-      {/* Helper Text */}
-      <p className="text-xs text-muted-foreground">
-        {type === "cv"
-          ? "Upload PDF file (max 10MB) or enter URL like /cv/filename.pdf"
-          : "Upload image (max 10MB) or enter URL like /images/image.jpg"}
-      </p>
+      {/* Helper Text & Instructions */}
+      <div className="space-y-2 p-3 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+        <p className="text-xs font-medium text-blue-900 dark:text-blue-100">
+          📁 Cara Upload File:
+        </p>
+        <ol className="text-xs text-blue-800 dark:text-blue-200 space-y-1 ml-4 list-decimal">
+          <li>
+            Copy file {type === "cv" ? "PDF" : "gambar"} ke folder{" "}
+            <code className="px-1 py-0.5 bg-blue-100 dark:bg-blue-900 rounded">
+              public/{type === "cv" ? "cv" : "images"}/
+            </code>
+          </li>
+          <li>
+            Commit & push ke GitHub:{" "}
+            <code className="px-1 py-0.5 bg-blue-100 dark:bg-blue-900 rounded text-[10px]">
+              git add . && git commit -m "Add files" && git push
+            </code>
+          </li>
+          <li>
+            Tunggu Vercel deploy (~2 menit)
+          </li>
+          <li>
+            Masukkan path di form ini: <code className="px-1 py-0.5 bg-blue-100 dark:bg-blue-900 rounded">
+              /{type === "cv" ? "cv" : "images"}/filename
+            </code>
+          </li>
+        </ol>
+        <a
+          href="https://github.com/dannel07/Portofolio/tree/main/public"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 text-xs text-blue-600 dark:text-blue-400 hover:underline mt-2"
+        >
+          <ExternalLink className="h-3 w-3" />
+          Buka folder public di GitHub
+        </a>
+      </div>
+
+      {/* Examples */}
+      <div className="space-y-1">
+        <p className="text-xs font-medium text-muted-foreground">
+          Contoh path yang benar:
+        </p>
+        <ul className="text-xs text-muted-foreground space-y-1 ml-4 list-disc">
+          {type === "cv" ? (
+            <>
+              <li><code>/cv/CV_Daniel_Sinambela.pdf</code></li>
+              <li><code>/cv/resume.pdf</code></li>
+            </>
+          ) : (
+            <>
+              <li><code>/images/profile.jpg</code></li>
+              <li><code>/images/project-ecommerce.png</code></li>
+              <li><code>https://cdn.example.com/image.jpg</code> (URL eksternal)</li>
+            </>
+          )}
+        </ul>
+      </div>
     </div>
   );
 }
