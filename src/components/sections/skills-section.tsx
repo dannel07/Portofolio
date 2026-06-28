@@ -48,6 +48,7 @@ export async function SkillsSection() {
                                 width={20}
                                 height={20}
                                 className="object-contain"
+                                unoptimized
                               />
                             </div>
                           )}

@@ -31,6 +31,7 @@ export async function HeroSection() {
                       fill
                       className="object-cover"
                       priority
+                      unoptimized={profile.avatar.startsWith('http')}
                     />
                   ) : (
                     <div className="relative h-full w-full bg-gradient-to-br from-primary/20 via-blue-500/20 to-purple-500/20">
